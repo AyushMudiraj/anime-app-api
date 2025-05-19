@@ -1,0 +1,30 @@
+# This file is used to run different checks on the codebase (using github actions)
+---
+name: Checks
+
+
+on: [push]
+
+# This workflow is triggered on push events to the repository.
+# It runs a series of checks to ensure code quality and correctness.
+# The checks include running tests and linting the code.
+# The workflow is defined in YAML format and uses GitHub Actions to automate the process.
+jobs:
+  test-lint:                    
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login yo Docker Hub             #login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Checkout                        #checkout the code
+        uses: actions/checkout@v4
+
+      - name: Test                            #run tests 
+        uses: docker-compose run --rm app sh -c "python manage.py test"
+
+      - name: Lint                            #run flake8 (linting or formatting)
+        run: docker-compose run --rm app sh -c "flake8"
