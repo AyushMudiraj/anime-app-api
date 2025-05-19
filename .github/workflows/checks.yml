@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4.1.0
 
       - name: Test                            #run tests 
-        uses: docker-compose run --rm app sh -c "python manage.py test"
+        run: docker-compose run --rm app sh -c "python manage.py test"
 
       - name: Lint                            #run flake8 (linting or formatting)
         run: docker-compose run --rm app sh -c "flake8"
